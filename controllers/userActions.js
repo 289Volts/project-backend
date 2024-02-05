@@ -1,3 +1,5 @@
+import { User } from '../models/userModel.js';
+
 export const login = (req, res) => {
 	const { username, password } = req.body;
 	if (!username || !password) {
@@ -10,12 +12,19 @@ export const logout = (req, res) => {
 	res.status(200).json({ msg: 'Logged out' });
 };
 
-export const register = (req, res) => {
-	const data = req.body;
+export const register = async (req, res) => {
+	const { data, success, error } = req.body;
 
-	if (!data.success) {
-		const error = data.error.issues[0];
-		return res.status(400).json({ msg: error.message });
+	// const user = await User.find({});
+	const user = await User.create({
+		username: data.username,
+		password: 'data.password'
+	});
+	console.log(user);
+
+	if (!success) {
+		const errorMsg = error.issues[0];
+		return res.status(400).json({ msg: errorMsg.message });
 	}
 	res.status(200).json({ msg: 'Registered' });
 };
