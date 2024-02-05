@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { login, logout } from '../controllers/userActions.js';
+import { register } from '../controllers/userActions.js';
+import { newUser, validate } from '../utils/validator.js';
 
 const route = Router();
 
 // route.get('/login', login);
-route.post('/login', logout);
+route.post('/register', validate(newUser), register);
 
 export default route;
