@@ -7,7 +7,8 @@ const UserSchema = new Schema({
 	role: { type: String, enum: ['admin', 'user', 'dev'], default: 'user' },
 	deleted: { type: Boolean, default: false },
 	suspended: { type: Boolean, default: false },
-	refreshToken: { type: String, select: false }
+	refreshToken: { type: String, select: false },
+	createdAt: { type: Date, default: Date.now }
 });
 
 UserSchema.pre(/^find/, function (next) {
