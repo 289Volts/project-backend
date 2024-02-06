@@ -1,9 +1,12 @@
 {
 	"name": "backend",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module",
+	"version": "1.0.0",
+	"description": "",
 	"main": "index.js",
+	"type": "module",
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
 	"scripts": {
 		"dev": "nodemon --experimental-specifier-resolution=node index.js",
 		"start": "node index.js",
