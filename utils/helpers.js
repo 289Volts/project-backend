@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/userModel.js';
 
 const { sign, verify, decode } = jwt;
-export const signToken = (id, role, secret, expiresIn) => {
+const signToken = (id, role, secret, expiresIn) => {
 	return sign(
 		{
 			id,
@@ -15,11 +15,11 @@ export const signToken = (id, role, secret, expiresIn) => {
 	);
 };
 
-export const decodeToken = (token, secret) => {
+const decodeToken = (token, secret) => {
 	return verify(token, secret);
 };
 
-export const verifyToken = async (res, accessToken, refreshToken) => {
+const verifyToken = async (res, accessToken, refreshToken) => {
 	if (!accessToken) return false;
 
 	try {
@@ -40,10 +40,6 @@ export const verifyToken = async (res, accessToken, refreshToken) => {
 				const newAccessToken = signToken({ id: user._id, role: user.role }, process.env.JWT_SECRET, '15m');
 				const newRefreshToken = signToken({ id: user._id, role: user.role }, process.env.JWT_REFRESH_SECRET, '365d');
 				await User.findByIdAndUpdate(user._id, { newRefreshToken });
-				// const cookies = [
-				// 	{ name: 'accessToken', value: newAccessToken, age: 900 },
-				// 	{ name: 'refreshToken', value: newRefreshToken, age: 900 }
-				// ];
 
 				res.setHeader('Set-Cookie', [
 					`accessToken=${newAccessToken}; HttpOnly; Path=/; Max-Age=900`,
@@ -57,3 +53,16 @@ export const verifyToken = async (res, accessToken, refreshToken) => {
 		} else return res.status(401).json({ message: 'You are unauthenticated' });
 	}
 };
+
+const setCookie = (res, name, value, options) => {
+	res.cookie(name, value, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === 'production',
+		path: '/',
+		sameSite: 'none',
+
+		...options
+	});
+};
+
+export { setCookie, verifyToken, signToken };
