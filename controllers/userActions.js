@@ -44,7 +44,7 @@ export const login = async (req, res) => {
 	if (!correctPwd)
 		return res.status(401).json({ status: 'error', success: 'false', message: 'Username or password incorrect' });
 	if (user.suspended)
-		return res.status(401).json({ status: 'error', success: 'false', message: 'You have been suspended' });
+		return res.status(401).json({ status: 'suspended', success: 'false', message: 'You have been suspended' });
 
 	const modifiedUser = (({ password, ...rest }) => rest)(user);
 	try {
